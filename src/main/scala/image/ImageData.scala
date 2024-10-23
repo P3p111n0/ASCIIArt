@@ -2,6 +2,7 @@ package image
 
 import scala.Array
 import pixel.Pixel
+import scala.util.boundary, boundary.break
 
 class ImageData[T <: Pixel] private (private val data : Array[Array[T]]) {
   private val width = data.length;
@@ -13,6 +14,14 @@ class ImageData[T <: Pixel] private (private val data : Array[Array[T]]) {
 
   def get_height(): Int = {
     height;
+  }
+
+  def get_width_iter(): Int = {
+    width - 1;
+  }
+
+  def get_height_iter(): Int = {
+    height - 1;
   }
 
   def at(row : Int, col : Int): Option[T] = {
@@ -31,10 +40,19 @@ object ImageData {
     }
 
     val height = data(0).length;
-    for (vec <- data) {
-      if (vec.length != height) {
-        return None
-      }
+    if (height == 0) {
+      return None;
+    }
+    var fail = false;
+    boundary:
+      for (vec <- data) {
+        if (vec.length != height) {
+          fail = true;
+          break();
+        }
+    }
+    if (fail) {
+      return None;
     }
 
     Some(new ImageData[T](data));
