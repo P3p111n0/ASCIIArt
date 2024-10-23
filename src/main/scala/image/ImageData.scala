@@ -1,20 +1,12 @@
 package image
 
-import scala.Array
+import scala.Vector
 import pixel.Pixel
 import scala.util.boundary, boundary.break
 
-class ImageData[T <: Pixel] private (private val data : Array[Array[T]]) {
-  private val width = data.length;
-  private val height = data(0).length;
-
-  def get_width(): Int = {
-    width;
-  }
-
-  def get_height(): Int = {
-    height;
-  }
+class ImageData[T <: Pixel] private (private val data : Vector[Vector[T]]) {
+  val width: Int = data.length;
+  val height: Int = data(0).length;
 
   def get_width_iter(): Int = {
     width - 1;
@@ -34,7 +26,7 @@ class ImageData[T <: Pixel] private (private val data : Array[Array[T]]) {
 }
 
 object ImageData {
-  def apply[T <: Pixel](data : Array[Array[T]]): Option[ImageData[T]] = {
+  def apply[T <: Pixel](data : Vector[Vector[T]]): Option[ImageData[T]] = {
     if (data.isEmpty) {
       return None;
     }
