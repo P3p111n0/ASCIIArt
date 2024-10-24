@@ -2,7 +2,12 @@ package image.pixel
 
 import scala.Option
 
-case class RGBPixel private (r : Int, g : Int, b : Int) extends Pixel {}
+case class RGBPixel private (r : Int, g : Int, b : Int) extends Pixel {
+  object RGBPixelDefault extends RGBPixel(0, 0, 0);
+  override def default(): RGBPixel = {
+    return new RGBPixelDefault;
+  }
+}
 
 object RGBPixel {
   def apply(r : Int, g : Int, b : Int): Option[RGBPixel] = {
