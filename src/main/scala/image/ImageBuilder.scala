@@ -2,6 +2,7 @@ package image
 
 import image.pixel.Pixel
 import scala.Vector
+import image.Image
 
 class ImageBuilder[T <: Pixel] private (width : Int, height : Int, private val data : Vector[Vector[T]]) {
   private def valid_idxs(i : Int, j : Int): Boolean = {
@@ -29,21 +30,22 @@ class ImageBuilder[T <: Pixel] private (width : Int, height : Int, private val d
   }
 
   def collect(): Image[T] = {
-    val image_data = ImageData(data);
-    assert(image_data.nonEmpty);
-    return Image(image_data.get);
+    return Image(data);
   }
 }
 
 object ImageBuilder {
-  def apply[T <: Pixel](width : Int, height: Int): Option[ImageBuilder[T]] = {
+  def apply[T <: Pixel](width : Int, height : Int, fill : T): Option[ImageBuilder[T]] = {
     if (width <= 0 || height <= 0) {
       return None;
     }
-    
-    val data : Vector[Vector[T]] = Vector.fill[T](3, 3)( T.apply() );
-    val image_data = ImageData(data);
-    return Some(new ImageBuilder(width, height, data));
-    
+    val data : Vector[Vector[T]] = Vector.fill[T](width, height)(fill);
+    return Some(new ImageBuilder[T](width, height, data));
+  }
+
+  def apply[T <: Pixel](img : Image[T]): ImageBuilder[T] = {
+    val width = img.data.length;
+    val height = img.data(0).length;
+    return new ImageBuilder[T](width, height, img.data);
   }
 }
