@@ -14,7 +14,7 @@ class RGBPixelTest extends AnyFunSuite {
       val b = gen.between(0, 256);
 
       RGBPixel(r, g, b) match {
-        case Some(_) =>
+        case Left(_) =>
         case _ => fail("Failed to construct RGBPixel with params (%d, %d, %d)".format(r, g, b));
       }
     }
@@ -26,12 +26,18 @@ class RGBPixelTest extends AnyFunSuite {
     var r = -1;
     var g = gen.between(0, 256);
     var b = gen.between(0, 256);
-
-    assert(RGBPixel(r, g, b).isEmpty);
+    
+    RGBPixel(r, g, b) match {
+      case Right(_) =>
+      case _ => fail("Invalid RGB pixel constructed with values (%d, %d, %d)".format(r, g, b));
+    }
 
     r = gen.between(0, 256);
     g = 67128736;
 
-    assert(RGBPixel(r, g, b).isEmpty);
+    RGBPixel(r, g, b) match {
+      case Right(_) =>
+      case _ => fail("Invalid RGB pixel constructed with values (%d, %d, %d)".format(r, g, b));
+    }
   }
 }

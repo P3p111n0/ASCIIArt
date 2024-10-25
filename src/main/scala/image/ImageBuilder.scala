@@ -1,5 +1,6 @@
 package image
 
+import error.Error
 import image.pixel.Pixel
 import scala.Vector
 import image.Image
@@ -10,23 +11,23 @@ class ImageBuilder[T <: Pixel] private (width : Int, height : Int, private val d
     return validate_idx(i, width) && validate_idx(j, height);
   }
 
-  def get_width_iter(): Int = width;
+  def get_width(): Int = width;
 
-  def get_height_iter(): Int = height;
+  def get_height(): Int = height;
 
-  def get(i : Int, j : Int): Option[T] = {
+  def get(i : Int, j : Int): Either[T, Error] = {
     if (!valid_idxs(i, j)) {
-      return None;
+      return Right(new Error("ImageBuilder::get: indices (%d, %d) out of range".format(i, j)));
     }
-    return Some(data(i)(j));
+    return Left(data(i)(j));
   }
 
-  def set(i : Int, j : Int, value : T): Option[ImageBuilder[T]] = {
+  def set(i : Int, j : Int, value : T): Either[ImageBuilder[T], Error] = {
     if (!valid_idxs(i, j)) {
-      return None;
+      return Right(new Error("ImageBuilder::set: indices (%d, %d) out of range".format(i, j)));
     }
 
-    return Some(new ImageBuilder[T](width, height, data.updated(i, data(i).updated(j, value))));
+    return Left(new ImageBuilder[T](width, height, data.updated(i, data(i).updated(j, value))));
   }
 
   def collect(): Image[T] = {
@@ -35,12 +36,17 @@ class ImageBuilder[T <: Pixel] private (width : Int, height : Int, private val d
 }
 
 object ImageBuilder {
-  def apply[T <: Pixel](width : Int, height : Int, fill : T): Option[ImageBuilder[T]] = {
-    if (width <= 0 || height <= 0) {
-      return None;
+  def apply[T <: Pixel](width : Int, height : Int, fill : T): Either[ImageBuilder[T], Error] = {
+    val err_val_msg = "ImageBuilder: %s must be positive";
+    if (width <= 0) {
+      return Right(new Error(err_val_msg.format("Width")));
     }
+    if (height <= 0) {
+      return Right(new Error(err_val_msg.format("Height")));
+    }
+
     val data : Vector[Vector[T]] = Vector.fill[T](width, height)(fill);
-    return Some(new ImageBuilder[T](width, height, data));
+    return Left(new ImageBuilder[T](width, height, data));
   }
 
   def apply[T <: Pixel](img : Image[T]): ImageBuilder[T] = {

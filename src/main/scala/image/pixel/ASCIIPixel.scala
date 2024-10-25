@@ -1,12 +1,15 @@
 package image.pixel
 
+import scala.Either
+import error.Error
+
 case class ASCIIPixel private (c : Char) extends Pixel {}
 
 object ASCIIPixel {
   private val default = new ASCIIPixel(0);
 
-  def apply(c : Char): Option[ASCIIPixel] = {
-    return Some(new ASCIIPixel(c));
+  def apply(c : Char): Either[ASCIIPixel, Error] = {
+    return Left(new ASCIIPixel(c));
   }
 
   def apply(): ASCIIPixel = {

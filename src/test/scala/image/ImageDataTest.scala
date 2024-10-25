@@ -14,8 +14,7 @@ class ImageDataTest extends AnyFunSuite {
       val b = gen.between(0, 256);
 
       val pixel = RGBPixel(r, g, b);
-      assert(pixel.nonEmpty);
-      return pixel.get;
+      return pixel.left.getOrElse(fail("This shouldn't happen."));
   }
 
   private def get_random_vector(width : Int, height : Int) : Vector[Vector[RGBPixel]] = {
