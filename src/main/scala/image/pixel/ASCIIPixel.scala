@@ -3,7 +3,7 @@ package image.pixel
 import scala.Either
 import error.Error
 
-case class ASCIIPixel private (c : Char) extends Pixel {}
+case class ASCIIPixel private[pixel] (c : Char) extends Pixel {}
 
 object ASCIIPixel {
   private val default = new ASCIIPixel(0);

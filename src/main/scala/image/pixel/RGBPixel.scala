@@ -3,7 +3,7 @@ package image.pixel
 import error.Error
 import scala.Either
 
-case class RGBPixel private (r : Int, g : Int, b : Int) extends Pixel {}
+case class RGBPixel private[pixel] (r : Int, g : Int, b : Int) extends Pixel {}
 
 object RGBPixel extends Pixel {
   private val default = new RGBPixel(0, 0, 0);
