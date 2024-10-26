@@ -1,4 +1,4 @@
-package loader;
+package io.loader;
 
 import scala.Either;
 import loader.Loader;
@@ -10,44 +10,35 @@ import image.Image;
 import image.ImageBuilder;
 import error.Error;
 import scala.util.boundary, boundary.break;
+import io.encoding.RGBDecoder;
 
 class ImageLoader private (private val f : File) extends Loader[RGBPixel] {
-  private val red_bitmask = 0xff0000;
-  private val green_bitmask = 0xff00;
-  private val blue_bitmask = 0xff;
-  
-  private val red_shift = 16;
-  private val green_shift = 8;
-
-  override def load(): Either[Image[RGBPixel], Error] = {
+    override def load(): Either[Image[RGBPixel], Error] = {
     val loaded_image = ImageIO.read(f);
     val fill = RGBPixel();
     val builder_opt = ImageBuilder(loaded_image.getWidth(), loaded_image.getHeight(), fill);
-    builder_opt match {
+    var builder: ImageBuilder[RGBPixel] = builder_opt match {
       case Right(e) => return Right(e);
-      case _ =>
+      case Left(x) => x; 
     }
-    var builder = builder_opt.left.getOrElse(assert(false)); // this shouldn't happen
-
-    boundary {
+    
+    val err : Option[Error] = boundary {
       for (i <- 0 until builder.get_width()) {
         for (j <- 0 until builder.get_height()) {
-          val pixel = loaded_image.getRGB(i, j);
-          val r = (pixel & red_bitmask) >> red_shift;
-          val g = (pixel & green_bitmask) >> green_shift;
-          val b = (pixel & blue_bitmask);
-          RGBPixel(r, g, b) match {
-            case Right(e) => break(e);
-            case Left(p) => {
-              val new_builder = builder.set(i, j, p);
-              new_builder match {
-                case Right(e) => break(e);
-                case Left(b) => builder = b;
-              }
-            }
+          val encoded_pixel = loaded_image.getRGB(i, j);
+          val pixel = RGBDecoder(encoded_pixel);
+          builder.set(i, j, pixel) match {
+            case Right(e) => break(Some(e));
+            case Left(b) => builder = b;
           }
         }
       }
+      None
+    }
+
+    err match {
+      case Some(e) => return Right(e);
+      case _ =>
     }
 
     return Left(builder.collect());
