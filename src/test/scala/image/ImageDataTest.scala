@@ -37,11 +37,9 @@ class ImageDataTest extends AnyFunSuite {
           val arr = get_random_vector(width, height);
           val obj = ImageData(arr);
           ImageData(arr) match {
-              case Some(img) => {
-                  assert(img.height == height + 1);
-                  assert(img.width == width + 1);
-                  assert(img.height - 1 == img.get_height_iter());
-                  assert(img.width - 1 == img.get_width_iter());
+              case Left(img) => {
+                  assert(img.get_height() == height + 1);
+                  assert(img.get_width() == width + 1);
               }
               case _ => fail("Failed to construct ImageData.");
           }
@@ -50,15 +48,24 @@ class ImageDataTest extends AnyFunSuite {
 
   test("Fails") {
       var arr = Vector[Vector[RGBPixel]]();
-      assert(ImageData(arr).isEmpty);
+      ImageData(arr) match {
+        case Right(_) =>
+        case _ => fail("ImageData constructed on an empty vector.");
+      }
 
       arr = Vector( Vector[RGBPixel]() );
-      assert(ImageData(arr).isEmpty);
+      ImageData(arr) match {
+        case Right(_) =>
+        case _ => fail("ImageData constructed with empty columns.");
+      }
 
       arr = Vector( Vector(get_random_pixel(), get_random_pixel(), get_random_pixel()),
         Vector(get_random_pixel(), get_random_pixel()),
         Vector(get_random_pixel(), get_random_pixel(), get_random_pixel()) );
-      assert(ImageData(arr).isEmpty);
+      ImageData(arr) match {
+        case Right(_) =>
+        case _ => fail("ImageData constructed with column height mismatch.");
+      }
     }
 
   test("At") {
@@ -66,18 +73,21 @@ class ImageDataTest extends AnyFunSuite {
       val height = gen.between(10, 50);
       val arr = get_random_vector(width, height);
       val img_opt = ImageData(arr);
-      assert(img_opt.nonEmpty);
-      val img = img_opt.get;
-      for (i <- 0 to img.get_width_iter()) {
-          for (j <- 0 to img.get_height_iter()) {
+      img_opt match {
+        case Right(e) => fail(e.msg);
+        case Left(img) => {
+          for (i <- 0 until img.get_width()) {
+            for (j <- 0 until img.get_height()) {
               img.at(i, j) match {
                   case Some(elem) => {
                       assert(arr(i)(j) == elem);
                   }
                   case _ => fail("Elements at [%d, %d] don't match.".format(i, j));
               }
+            }
           }
-      }  
+        }
+      }
   }  
 }
 

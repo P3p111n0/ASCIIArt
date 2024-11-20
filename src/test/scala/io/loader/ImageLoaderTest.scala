@@ -6,13 +6,14 @@ import image.ImageBuilder
 import javax.imageio.ImageIO;
 import java.io.File; 
 import io.encoding.RGBEncoder;
+import io.encoding.RGBDecoder
 
 class ImageLoaderTest extends AnyFunSuite {
   val test_images = List("./src/test/static/bobinka.png");
   
   test("Constructs"){
     for (img <- test_images) {
-      ImageLoader(img) match {
+      ImageLoader(img, RGBDecoder) match {
         case Right(e) => fail("ImageLoader failed to construct with error: %s".format(e.msg));
         case _ =>
       }
@@ -24,17 +25,17 @@ class ImageLoaderTest extends AnyFunSuite {
     val not_a_file = "./src";
     val not_an_image = "./README.md";
     
-    ImageLoader(doesnt_exist) match {
+    ImageLoader(doesnt_exist, RGBDecoder) match {
       case Right(_) =>
       case _ => fail("ImageLoader constructed from a non-existing file.");
     }
     
-    ImageLoader(not_a_file) match {
+    ImageLoader(not_a_file, RGBDecoder) match {
       case Right(_) =>
       case _ => fail("ImageLoader constructed from a directory.");
     }
     
-    ImageLoader(doesnt_exist) match {
+    ImageLoader(doesnt_exist, RGBDecoder) match {
       case Right(_) =>
       case _ => fail("ImageLoader constructed from a file thats not an image.");
     }
@@ -43,7 +44,7 @@ class ImageLoaderTest extends AnyFunSuite {
   test("Loads") {
     for (img <- test_images) {
       val ref_pixels = ImageIO.read(new File(img));
-      val loader = ImageLoader(img) match {
+      val loader = ImageLoader(img, RGBDecoder) match {
         case Right(e) => fail("Load test: ImageLoader failed to construct with error: %s".format(e.msg));
         case Left(x) => x;
       }
@@ -52,13 +53,13 @@ class ImageLoaderTest extends AnyFunSuite {
         case Left(i) => i;
       } 
 
-      assert(loaded_image.data.length == ref_pixels.getWidth());
+      assert(loaded_image.data.get_width() == ref_pixels.getWidth());
       for (i <- 0 until ref_pixels.getWidth()) {
-        assert(loaded_image.data(i).length == ref_pixels.getHeight());
+        assert(loaded_image.data.get_height() == ref_pixels.getHeight());
         for (j <- 0 until ref_pixels.getHeight()) {
           val ref_pixel = ref_pixels.getRGB(i, j) & 0x00ffffff; // bitmask removes alpha component  
-          val tested_pixel = RGBEncoder(loaded_image.data(i)(j));
-
+          val pix = loaded_image.data.at(i, j).getOrElse(fail("ImageLoaderTest: this shouldn't happen.")); 
+          val tested_pixel = RGBEncoder(pix);
           if (ref_pixel != tested_pixel) {
             fail("Load test: pixels at offset (%d, %d) don't match.".format(i, j));
           }

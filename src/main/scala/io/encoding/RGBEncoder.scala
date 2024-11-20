@@ -11,3 +11,9 @@ object RGBEncoder extends ToIntEncoder[RGBPixel] {
     return res;
   }
 }
+
+object GrayscaleEncoder extends Encoder[RGBPixel, Double] {
+  override def apply(elem: RGBPixel): Double = {
+    return ((0.3 * elem.r) + (0.59 * elem.g) + (0.11 * elem.b));
+  } 
+}

@@ -10,9 +10,9 @@ import image.Image;
 import image.ImageBuilder;
 import error.Error;
 import scala.util.boundary, boundary.break;
-import io.encoding.RGBDecoder;
+import io.encoding.Decoder;
 
-class ImageLoader private (private val f : File) extends Loader[RGBPixel] {
+class ImageLoader private (private val f : File, private val decoder : Decoder[Int, RGBPixel]) extends Loader[RGBPixel] {
     override def load(): Either[Image[RGBPixel], Error] = {
     val loaded_image = ImageIO.read(f);
     val fill = RGBPixel();
@@ -26,7 +26,7 @@ class ImageLoader private (private val f : File) extends Loader[RGBPixel] {
       for (i <- 0 until builder.get_width()) {
         for (j <- 0 until builder.get_height()) {
           val encoded_pixel = loaded_image.getRGB(i, j);
-          val pixel = RGBDecoder(encoded_pixel);
+          val pixel = decoder(encoded_pixel);
           builder.set(i, j, pixel) match {
             case Right(e) => break(Some(e));
             case Left(b) => builder = b;
@@ -55,7 +55,7 @@ object ImageLoader {
     return false;
   }
 
-  def apply(s : String): Either[ImageLoader, Error] = {
+  def apply(s : String, decoder : Decoder[Int, RGBPixel]): Either[ImageLoader, Error] = {
     val f = new File(s);
 
     if (!f.exists()) {
@@ -66,6 +66,6 @@ object ImageLoader {
       return Right(new Error("%s is not an image.".format(s)));
     }
 
-    return Left(new ImageLoader(f));
+    return Left(new ImageLoader(f, decoder));
   }
 }

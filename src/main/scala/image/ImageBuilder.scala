@@ -5,29 +5,28 @@ import image.pixel.Pixel
 import scala.Vector
 import image.Image
 
-class ImageBuilder[T <: Pixel] private (width : Int, height : Int, private val data : Vector[Vector[T]]) {
+class ImageBuilder[T <: Pixel] private (private val data : ImageData[T]) {
   private def valid_idxs(i : Int, j : Int): Boolean = {
     val validate_idx = (x : Int, limit : Int) => 0 <= x && x < limit;
-    return validate_idx(i, width) && validate_idx(j, height);
+    return validate_idx(i, data.get_width()) && validate_idx(j, data.get_height());
   }
 
-  def get_width(): Int = width;
+  def get_width(): Int = data.get_width();
 
-  def get_height(): Int = height;
+  def get_height(): Int = data.get_height();
 
   def get(i : Int, j : Int): Either[T, Error] = {
-    if (!valid_idxs(i, j)) {
-      return Right(new Error("ImageBuilder::get: indices (%d, %d) out of range".format(i, j)));
+    data.at(i, j) match {
+      case None => Right(new Error("ImageBuilder::get: Pixel indices out of bounds."));
+      case Some(x) => Left(x);
     }
-    return Left(data(i)(j));
   }
 
   def set(i : Int, j : Int, value : T): Either[ImageBuilder[T], Error] = {
-    if (!valid_idxs(i, j)) {
-      return Right(new Error("ImageBuilder::set: indices (%d, %d) out of range".format(i, j)));
+    data.set(i, j, value) match {
+      case None => return Right(new Error("ImageBuilder::set: indices (%d, %d) out of range".format(i, j)));
+      case Some(new_data) => return Left(new ImageBuilder[T](new_data));
     }
-
-    return Left(new ImageBuilder[T](width, height, data.updated(i, data(i).updated(j, value))));
   }
 
   def collect(): Image[T] = {
@@ -45,13 +44,14 @@ object ImageBuilder {
       return Right(new Error(err_val_msg.format("Height")));
     }
 
-    val data : Vector[Vector[T]] = Vector.fill[T](width, height)(fill);
-    return Left(new ImageBuilder[T](width, height, data));
+    val data_vec : Vector[Vector[T]] = Vector.fill[T](width, height)(fill);
+    ImageData[T](data_vec) match {
+      case Right(e) => return Right(e);
+      case Left(img) => return Left(new ImageBuilder[T](img));
+    }
   }
 
   def apply[T <: Pixel](img : Image[T]): ImageBuilder[T] = {
-    val width = img.data.length;
-    val height = img.data(0).length;
-    return new ImageBuilder[T](width, height, img.data);
+    return new ImageBuilder[T](img.data);
   }
 }
