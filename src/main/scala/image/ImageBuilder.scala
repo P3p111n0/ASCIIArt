@@ -32,6 +32,10 @@ class ImageBuilder[T <: Pixel] private (private val data : ImageData[T]) {
   def collect(): Image[T] = {
     return Image(data);
   }
+
+  def map[U <: Pixel](fn : T => U): ImageBuilder[U] = {
+    return new ImageBuilder[U](data.map(fn));
+  }
 }
 
 object ImageBuilder {

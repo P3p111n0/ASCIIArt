@@ -8,27 +8,17 @@ import image.pixel.Pixel
 class Rotation[T <: Pixel] private (var angle : Int) extends Transformation[T, T] {
   private def rotate_clockwise_90(img : Image[T]): Image[T] = {
     val og_builder = ImageBuilder(img);
-    val fill : T = og_builder.get(0, 0) match {
-      case Left(p) => p;
-      case _ => assert(false) // this shouldn't happen
-    }
+    val fill : T = img.iterate().next().value; 
     var builder = ImageBuilder[T](img.height(), img.width(), fill) match {
       case Left(b) => b;
       case _ => assert(false)
     }
 
-    for (i <- 0 until og_builder.get_width()) {
-      for (j <- 0 until og_builder.get_height()) {
-        val pixel = og_builder.get(i, j) match {
-          case Left(p) => p;
-          case _ => assert(false);
-        }
-
-        builder = builder.set(j, i, pixel) match {
+    for (pos <- img.iterate()) {
+        builder = builder.set(pos.col, pos.row, pos.value) match {
           case Left(b) => b;
           case _ => assert(false);
         }
-      }
     }
 
     return builder.collect();

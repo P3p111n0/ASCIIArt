@@ -6,10 +6,11 @@ trait ASCIIMap[T](val map : String) {
   def apply(value : T): ASCIIPixel;
 }
 
-class ASCIIIntMap(val map_ : String) extends ASCIIMap[Int](map_) {
-  override def apply(value: Int): ASCIIPixel = {
-    val scaled = Math.min(Math.max(0, value), map.length() - 1);
-    val c = map(scaled);
+class ASCIIIntMap(val map_ : String) extends ASCIIMap[Double](map_) {
+  override def apply(value: Double): ASCIIPixel = {
+    val scaled = Math.round(value / map_.length()).toInt;
+    assert(scaled < map_.length());
+    val c = map_(scaled);
     ASCIIPixel(c) match {
       case Right(_) => return ASCIIPixel(); // this shouldnt happen;
       case Left(p) => return p;

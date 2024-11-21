@@ -5,10 +5,19 @@ import pixel.Pixel
 import scala.util.boundary, boundary.break
 import error.Error
 
-class ImageData[T <: Pixel] private (private val data : Vector[Vector[T]]) {
+class ImageData[T <: Pixel] private[image] (private val data : Vector[Vector[T]]) {
   val width: Int = data.length;
   val height: Int = data(0).length;
   private val validate = (x : Int, limit : Int) => x >= 0 && x < limit;
+
+  private def get_inbounds(i : Int, j : Int): T = {
+    return data(i)(j);
+  }
+
+  private def set_inbounds(i : Int, j : Int, value : T): ImageData[T] = {
+    val new_data = data.updated(i, data(i).updated(j, value));
+    return new ImageData(new_data);
+  }
 
   def get_width(): Int = {
     return width;
@@ -31,6 +40,11 @@ class ImageData[T <: Pixel] private (private val data : Vector[Vector[T]]) {
     }
     val new_data = data.updated(row, data(row).updated(col, value));
     return Some(new ImageData(new_data));
+  }
+
+  def map[U <: Pixel](fn : T => U): ImageData[U] = {
+    val vec: Vector[Vector[U]] = data.map(_.map(fn));
+    return new ImageData[U](vec);
   }
 }
 
