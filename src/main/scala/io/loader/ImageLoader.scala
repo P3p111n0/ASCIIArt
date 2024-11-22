@@ -10,7 +10,7 @@ import image.Image;
 import image.ImageBuilder;
 import error.Error;
 import scala.util.boundary, boundary.break;
-import io.encoding.Decoder;
+import image.pixel.encoding.Decoder;
 
 class ImageLoader private (private val f : File, private val decoder : Decoder[Int, RGBPixel]) extends Loader[RGBPixel] {
     override def load(): Either[Image[RGBPixel], Error] = {

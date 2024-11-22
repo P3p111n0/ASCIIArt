@@ -1,4 +1,4 @@
-package io.encoding
+package image.pixel.encoding
 
 import image.pixel.Pixel;
 

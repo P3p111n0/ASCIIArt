@@ -3,7 +3,7 @@ package io.saver;
 import image.Image
 import error.Error
 import image.pixel.Pixel
-import io.encoding.Encoder
+import image.pixel.encoding.Encoder
 import image.pixel.ASCIIPixel
 import java.io.File
 import java.io.FileOutputStream
