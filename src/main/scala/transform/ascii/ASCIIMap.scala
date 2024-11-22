@@ -1,15 +1,20 @@
 package transform.ascii;
 
 import image.pixel.{Pixel, ASCIIPixel};
+import error.InternalException
 
-trait ASCIIMap[T](val map : String) {
+trait ASCIIMap[T] {
   def apply(value : T): ASCIIPixel;
 }
 
-class ASCIIIntMap(val map_ : String) extends ASCIIMap[Double](map_) {
+trait ASCIIStringMap[T](val map : String) extends ASCIIMap[T];
+
+class ASCIIDoubleMap(val map_ : String) extends ASCIIStringMap[Double](map_) {
   override def apply(value: Double): ASCIIPixel = {
     val scaled = Math.round(value / map_.length()).toInt;
-    assert(scaled < map_.length());
+    if (scaled >= map_.length()) {
+      throw new InternalException("ASCIIDoubleMap: scaled value %lf is out of range.".format(scaled));
+    }
     val c = map_(scaled);
     ASCIIPixel(c) match {
       case Right(_) => return ASCIIPixel(); // this shouldnt happen;
@@ -18,4 +23,4 @@ class ASCIIIntMap(val map_ : String) extends ASCIIMap[Double](map_) {
   }
 }
 
-object StandardASCIIMap extends ASCIIIntMap("$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`\'. ");
+object StandardASCIIMap extends ASCIIDoubleMap("$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`\'. ");

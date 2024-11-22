@@ -4,6 +4,7 @@ import image.Image
 import error.Error
 import image.ImageBuilder
 import image.pixel.Pixel
+import error.InternalException
 
 class Rotation[T <: Pixel] private (var angle : Int) extends Transformation[T, T] {
   private def rotate_clockwise_90(img : Image[T]): Image[T] = {
@@ -11,13 +12,13 @@ class Rotation[T <: Pixel] private (var angle : Int) extends Transformation[T, T
     val fill : T = img.iterate().next().value; 
     var builder = ImageBuilder[T](img.height(), img.width(), fill) match {
       case Left(b) => b;
-      case _ => assert(false)
+      case _ => throw new InternalException("Rotation: Failed to construct builder.");
     }
 
     for (pos <- img.iterate()) {
         builder = builder.set(pos.col, pos.row, pos.value) match {
           case Left(b) => b;
-          case _ => assert(false);
+          case _ => throw new InternalException("Rotation: Failed to set at (%d, %d).".format(pos.col, pos.row));
         }
     }
 

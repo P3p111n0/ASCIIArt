@@ -3,6 +3,7 @@ package image.iterator;
 import image.Image;
 import image.pixel.Pixel
 import error.Error;
+import error.InternalException
 
 case class ImageElement[T <: Pixel] private[iterator](val row : Int, val col : Int, val value : T);
 
@@ -18,7 +19,7 @@ class ImageIterator[T <: Pixel] private[image](private val image : Image[T], pri
 
     val pixel = image.data.at(row, col) match {
       case Some(p) => p;
-      case None => assert(false);
+      case None => throw new InternalException("ImageIterator: Failed to get from data container."); 
     }
 
     val result = new ImageElement(row, col, pixel);
