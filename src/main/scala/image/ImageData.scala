@@ -10,6 +10,10 @@ class ImageData[T <: Pixel] private[image] (private val data : Vector[Vector[T]]
   val height: Int = data(0).length;
   private val validate = (x : Int, limit : Int) => x >= 0 && x < limit;
 
+  private def is_inbounds(i : Int, j : Int): Boolean = {
+    return validate(i, width) && validate(j, height);
+  }
+
   private def get_inbounds(i : Int, j : Int): T = {
     return data(i)(j);
   }
@@ -45,6 +49,23 @@ class ImageData[T <: Pixel] private[image] (private val data : Vector[Vector[T]]
   def map[U <: Pixel](fn : T => U): ImageData[U] = {
     val vec: Vector[Vector[U]] = data.map(_.map(fn));
     return new ImageData[U](vec);
+  }
+
+  def swap(i : Int, j : Int, i_ : Int, j_ : Int): Either[ImageData[T], Error] = {
+    if (!is_inbounds(i, j)) {
+      return Right(new Error("ImageData::swap: First pair of indices (%d. %d) is out of range.".format(i, j)));
+    } else if (!is_inbounds(i_, j_)) {
+      return Right(new Error("ImageData::swap: Second pair of indices (%d. %d) is out of range.".format(i_, j_)));
+    }
+
+    var result = new ImageData(data); 
+    val first = result.get_inbounds(i, j);
+    val second = result.get_inbounds(i_, j_);
+
+    result = result.set_inbounds(i, j, second);
+    result = result.set_inbounds(i_, j_, first);
+
+    return Left(result);
   }
 }
 

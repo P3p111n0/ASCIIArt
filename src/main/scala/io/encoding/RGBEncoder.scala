@@ -25,3 +25,13 @@ class GrayscaleInverter[T <: Pixel](val to_grayscale : Encoder[T, Double]) exten
     return white - to_grayscale(elem);
   }
 }
+
+class BrightnessModifier[T <: Pixel](val offset : Double, val to_grayscale : Encoder[T, Double]) extends Encoder[T, Double] {
+  private val minimum = 0;
+  private val maximum = 255;
+  override def apply(elem: T): Double = {
+    val converted_value = to_grayscale(elem);
+    val result = Math.max(minimum, Math.min(converted_value + offset, maximum));
+    return result;
+  }
+}

@@ -36,6 +36,13 @@ class ImageBuilder[T <: Pixel] private (private val data : ImageData[T]) {
   def map[U <: Pixel](fn : T => U): ImageBuilder[U] = {
     return new ImageBuilder[U](data.map(fn));
   }
+
+  def swap(i : Int, j : Int, i_ : Int, j_ : Int): Either[ImageBuilder[T], Error] = {
+    data.swap(i, j, i_, j_) match {
+      case Left(d) => Left(new ImageBuilder(d));
+      case Right(e) => Right(e);
+    }
+  }
 }
 
 object ImageBuilder {
