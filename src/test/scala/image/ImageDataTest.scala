@@ -1,4 +1,4 @@
-package image;
+package image.data;
 
 import org.scalatest.funsuite.AnyFunSuite
 import scala.util.Random

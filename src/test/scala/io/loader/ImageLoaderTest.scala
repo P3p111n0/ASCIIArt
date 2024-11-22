@@ -5,8 +5,8 @@ import image.pixel.RGBPixel;
 import image.ImageBuilder
 import javax.imageio.ImageIO;
 import java.io.File; 
-import io.encoding.RGBEncoder;
-import io.encoding.RGBDecoder
+import image.pixel.encoding.RGBEncoder;
+import image.pixel.encoding.RGBDecoder;
 
 class ImageLoaderTest extends AnyFunSuite {
   val test_images = List("./src/test/static/bobinka.png");

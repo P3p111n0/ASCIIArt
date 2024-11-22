@@ -1,9 +1,9 @@
-package io.encoding;
+package image.pixel.encoding;
 
 import org.scalatest.funsuite.AnyFunSuite;
 import image.pixel.RGBPixel;
 import utils.TestUtils;
-import io.encoding.RGBEncoder;
+import image.pixel.encoding.RGBEncoder;
 
 class RGBEncoderTest extends AnyFunSuite {
   test("RGB Encoding"){
