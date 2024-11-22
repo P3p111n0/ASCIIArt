@@ -1,17 +1,15 @@
-package image
+package image.data;
 
 import scala.Vector
-import pixel.Pixel
+import image.pixel.Pixel
 import scala.util.boundary, boundary.break
 import error.Error
 
-class ImageData[T <: Pixel] private[image] (private val data : Vector[Vector[T]]) {
-  val width: Int = data.length;
-  val height: Int = data(0).length;
+class ImageData[T <: Pixel] private[image] (private val data : Vector[Vector[T]]) extends ImageDataContainer[T] {
   private val validate = (x : Int, limit : Int) => x >= 0 && x < limit;
 
   private def is_inbounds(i : Int, j : Int): Boolean = {
-    return validate(i, width) && validate(j, height);
+    return validate(i, width()) && validate(j, height());
   }
 
   private def get_inbounds(i : Int, j : Int): T = {
@@ -23,23 +21,23 @@ class ImageData[T <: Pixel] private[image] (private val data : Vector[Vector[T]]
     return new ImageData(new_data);
   }
 
-  def get_width(): Int = {
-    return width;
+  def width(): Int = {
+    return data.length;
   }
 
-  def get_height(): Int = {
-    return height;
+  def height(): Int = {
+    return data(0).length;
   }
 
   def at(row : Int, col : Int): Option[T] = {
-    if (!validate(row, width) || !validate(col, height)) {
+    if (!validate(row, width()) || !validate(col, height())) {
       return None;
     }
     return Some(data(row)(col));
   }
 
   def set(row : Int, col : Int, value : T): Option[ImageData[T]] = {
-    if (!validate(row, width) || !validate(col, height)) {
+    if (!validate(row, width()) || !validate(col, height())) {
       return None;
     }
     val new_data = data.updated(row, data(row).updated(col, value));

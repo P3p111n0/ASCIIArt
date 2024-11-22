@@ -53,9 +53,9 @@ class ImageLoaderTest extends AnyFunSuite {
         case Left(i) => i;
       } 
 
-      assert(loaded_image.data.get_width() == ref_pixels.getWidth());
+      assert(loaded_image.data.width() == ref_pixels.getWidth());
       for (i <- 0 until ref_pixels.getWidth()) {
-        assert(loaded_image.data.get_height() == ref_pixels.getHeight());
+        assert(loaded_image.data.height() == ref_pixels.getHeight());
         for (j <- 0 until ref_pixels.getHeight()) {
           val ref_pixel = ref_pixels.getRGB(i, j) & 0x00ffffff; // bitmask removes alpha component  
           val pix = loaded_image.data.at(i, j).getOrElse(fail("ImageLoaderTest: this shouldn't happen.")); 

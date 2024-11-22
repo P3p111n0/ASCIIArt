@@ -38,8 +38,8 @@ class ImageDataTest extends AnyFunSuite {
           val obj = ImageData(arr);
           ImageData(arr) match {
               case Left(img) => {
-                  assert(img.get_height() == height + 1);
-                  assert(img.get_width() == width + 1);
+                  assert(img.height() == height + 1);
+                  assert(img.width() == width + 1);
               }
               case _ => fail("Failed to construct ImageData.");
           }
@@ -76,8 +76,8 @@ class ImageDataTest extends AnyFunSuite {
       img_opt match {
         case Right(e) => fail(e.msg);
         case Left(img) => {
-          for (i <- 0 until img.get_width()) {
-            for (j <- 0 until img.get_height()) {
+          for (i <- 0 until img.width()) {
+            for (j <- 0 until img.height()) {
               img.at(i, j) match {
                   case Some(elem) => {
                       assert(arr(i)(j) == elem);

@@ -4,16 +4,18 @@ import error.Error
 import image.pixel.Pixel
 import scala.Vector
 import image.Image
+import image.data.ImageDataContainer
+import image.data.ImageData
 
-class ImageBuilder[T <: Pixel] private (private val data : ImageData[T]) {
+class ImageBuilder[T <: Pixel] private (private val data : ImageDataContainer[T]) {
   private def valid_idxs(i : Int, j : Int): Boolean = {
     val validate_idx = (x : Int, limit : Int) => 0 <= x && x < limit;
-    return validate_idx(i, data.get_width()) && validate_idx(j, data.get_height());
+    return validate_idx(i, data.width()) && validate_idx(j, data.height());
   }
 
-  def get_width(): Int = data.get_width();
+  def get_width(): Int = data.width();
 
-  def get_height(): Int = data.get_height();
+  def get_height(): Int = data.height();
 
   def get(i : Int, j : Int): Either[T, Error] = {
     data.at(i, j) match {

@@ -4,7 +4,7 @@ import image.Image;
 import image.pixel.Pixel
 import error.Error;
 
-class ImageElement[T <: Pixel] private[iterator](val row : Int, val col : Int, val value : T);
+case class ImageElement[T <: Pixel] private[iterator](val row : Int, val col : Int, val value : T);
 
 class ImageIterator[T <: Pixel] private[image](private val image : Image[T], private var row : Int, private var col : Int) extends Iterator[ImageElement[T]] {
   override def hasNext(): Boolean = {
