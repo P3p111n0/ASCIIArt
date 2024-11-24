@@ -7,9 +7,7 @@ import image.pixel.encoding.RGBEncoder;
 
 class RGBDecoderTest extends AnyFunSuite {
   test("RGB Decoding"){
-    val ntests = 10; 
-
-    for (i <- 0 until ntests) {
+    for (i <- 0 until TestUtils.nshots) {
       val value = TestUtils.get_random_int();
       val r = (value & 0xff0000) >> 16;
       val g = (value & 0xff00) >> 8;

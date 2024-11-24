@@ -7,9 +7,7 @@ import image.pixel.encoding.RGBEncoder;
 
 class RGBEncoderTest extends AnyFunSuite {
   test("RGB Encoding"){
-    val ntests = 10; 
-
-    for (i <- 0 until ntests) {
+    for (i <- 0 until TestUtils.nshots) {
       val pixel = TestUtils.get_random_rgb_pixel();
       val res = RGBEncoder(pixel);
       
