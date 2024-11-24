@@ -6,10 +6,13 @@ import scala.util.boundary, boundary.break
 import error.Error
 
 class ImageData[T <: Pixel] private[image] (private val data : Vector[Vector[T]]) extends ImageDataContainer[T] {
-  private val validate = (x : Int, limit : Int) => x >= 0 && x < limit;
-
   private def is_inbounds(i : Int, j : Int): Boolean = {
-    return validate(i, width()) && validate(j, height());
+    if (i < 0 || i >= width()) {
+      return false;
+    } else if (j < 0 || j >= height()) {
+      return false;
+    }
+    return true;
   }
 
   private def get_inbounds(i : Int, j : Int): T = {
@@ -30,14 +33,14 @@ class ImageData[T <: Pixel] private[image] (private val data : Vector[Vector[T]]
   }
 
   def at(row : Int, col : Int): Option[T] = {
-    if (!validate(row, width()) || !validate(col, height())) {
+    if (!is_inbounds(row, col)) {
       return None;
     }
     return Some(data(row)(col));
   }
 
   def set(row : Int, col : Int, value : T): Option[ImageData[T]] = {
-    if (!validate(row, width()) || !validate(col, height())) {
+    if (!is_inbounds(row, col)) {
       return None;
     }
     val new_data = data.updated(row, data(row).updated(col, value));
@@ -47,23 +50,6 @@ class ImageData[T <: Pixel] private[image] (private val data : Vector[Vector[T]]
   def map[U <: Pixel](fn : T => U): ImageData[U] = {
     val vec: Vector[Vector[U]] = data.map(_.map(fn));
     return new ImageData[U](vec);
-  }
-
-  def swap(i : Int, j : Int, i_ : Int, j_ : Int): Either[ImageData[T], Error] = {
-    if (!is_inbounds(i, j)) {
-      return Right(new Error("ImageData::swap: First pair of indices (%d. %d) is out of range.".format(i, j)));
-    } else if (!is_inbounds(i_, j_)) {
-      return Right(new Error("ImageData::swap: Second pair of indices (%d. %d) is out of range.".format(i_, j_)));
-    }
-
-    var result = new ImageData(data); 
-    val first = result.get_inbounds(i, j);
-    val second = result.get_inbounds(i_, j_);
-
-    result = result.set_inbounds(i, j, second);
-    result = result.set_inbounds(i_, j_, first);
-
-    return Left(result);
   }
 }
 

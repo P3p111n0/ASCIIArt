@@ -40,10 +40,18 @@ class ImageBuilder[T <: Pixel] private (private val data : ImageDataContainer[T]
   }
 
   def swap(i : Int, j : Int, i_ : Int, j_ : Int): Either[ImageBuilder[T], Error] = {
-    data.swap(i, j, i_, j_) match {
-      case Left(d) => Left(new ImageBuilder(d));
-      case Right(e) => Right(e);
+    if (!valid_idxs(i, j)) {
+      return Right(new Error("ImageBuilder::swap: First pixel indices out of bounds."));
     }
+    if (!valid_idxs(i_, j_)) {
+      return Right(new Error("ImageBuilder::swap: Second pixel indices out of bounds."));
+    }
+
+    val first = data.at(i, j).get;
+    val second = data.at(i_, j_).get;
+
+    val new_data = data.set(i, j, second).get.set(i_, j_, first).get;
+    return Left(new ImageBuilder[T](new_data));
   }
 }
 
