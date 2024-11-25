@@ -12,26 +12,3 @@ object RGBEncoder extends ToIntEncoder[RGBPixel] {
     return res;
   }
 }
-
-object GrayscaleEncoder extends Encoder[RGBPixel, Double] {
-  override def apply(elem: RGBPixel): Double = {
-    return ((0.3 * elem.r) + (0.59 * elem.g) + (0.11 * elem.b));
-  } 
-}
-
-class GrayscaleInverter[T <: Pixel](val to_grayscale : Encoder[T, Double]) extends Encoder[T, Double] {
-  private val white : Double = 255;
-  override def apply(elem: T): Double = {
-    return white - to_grayscale(elem);
-  }
-}
-
-class BrightnessModifier[T <: Pixel](val offset : Double, val to_grayscale : Encoder[T, Double]) extends Encoder[T, Double] {
-  private val minimum = 0;
-  private val maximum = 255;
-  override def apply(elem: T): Double = {
-    val converted_value = to_grayscale(elem);
-    val result = Math.max(minimum, Math.min(converted_value + offset, maximum));
-    return result;
-  }
-}
