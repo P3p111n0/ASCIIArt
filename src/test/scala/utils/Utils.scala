@@ -63,4 +63,28 @@ object TestUtils {
     }
     return Image(data);
   }
+
+  def get_random_rgb_vector(width : Int, height : Int) : Vector[Vector[RGBPixel]] = {
+      var arr = Vector[Vector[RGBPixel]]()
+      for (i <- 0 until width) {
+        var inner = Vector[RGBPixel]();
+        for (_ <- 0 until height) {
+          inner = inner :+ get_random_rgb_pixel();
+        }
+        arr = arr :+ inner;
+      }
+      return arr;
+  }
+
+  def get_random_rgb_image(): Image[RGBPixel] = {
+    val dims = get_random_dims();
+    val width = dims(0);
+    val height = dims(1);
+    val vec = get_random_rgb_vector(width, height);
+    val data = ImageData(vec) match {
+      case Left(value) => value;
+      case Right(value) => assert(false);
+    }
+    return Image(data);
+  }
 }

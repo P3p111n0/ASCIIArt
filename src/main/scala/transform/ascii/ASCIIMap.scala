@@ -7,20 +7,23 @@ trait ASCIIMap[T] {
   def apply(value : T): ASCIIPixel;
 }
 
-trait ASCIIStringMap[T](val map : String) extends ASCIIMap[T];
+abstract class ASCIIStringMap[T](val map : String) extends ASCIIMap[T];
 
-class ASCIIDoubleMap(val map_ : String) extends ASCIIStringMap[Double](map_) {
-  override def apply(value: Double): ASCIIPixel = {
-    val scaled = Math.round(value / map_.length()).toInt;
+class ASCIIIntMap(val map_ : String) extends ASCIIStringMap[Int](map_) {
+  private val max = 255;
+  override def apply(value: Int): ASCIIPixel = {
+    val ratio : Double = max / map_.length();
+    var scaled = (value / ratio).toInt;
+    scaled = Math.min(scaled, map_.length() - 1);
     if (scaled >= map_.length()) {
-      throw new InternalException("ASCIIDoubleMap: scaled value %lf is out of range.".format(scaled));
+      throw new InternalException("ASCIIIntMap: scaled value %d is out of range.".format(scaled));
     }
     val c = map_(scaled);
     ASCIIPixel(c) match {
-      case Right(_) => return ASCIIPixel(); // this shouldnt happen;
+      case Right(_) => throw new InternalException("ASCIIIntMap: Couldn't construct ASCIIPixel.");
       case Left(p) => return p;
     }
   }
 }
 
-object StandardASCIIMap extends ASCIIDoubleMap("$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`\'. ");
+object StandardASCIIMap extends ASCIIIntMap(" .\'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$");
