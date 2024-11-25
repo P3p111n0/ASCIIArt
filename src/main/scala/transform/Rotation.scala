@@ -6,10 +6,9 @@ import image.ImageBuilder
 import image.pixel.Pixel
 import error.InternalException
 
-class Rotation[T <: Pixel] private (var angle : Int) extends Transformation[T, T] {
+class Rotation[T <: Pixel] private (val angle : Int) extends Transformation[T, T] {
   private def rotate_clockwise_90(img : Image[T]): Image[T] = {
-    val og_builder = ImageBuilder(img);
-    val fill : T = img.iterate().next().value; 
+    val fill : T = img.iterate().next().value;
     var builder = ImageBuilder[T](img.height(), img.width(), fill) match {
       case Left(b) => b;
       case _ => throw new InternalException("Rotation: Failed to construct builder.");
@@ -26,14 +25,15 @@ class Rotation[T <: Pixel] private (var angle : Int) extends Transformation[T, T
   }
 
   override def apply(img: Image[T]): Image[T] = {
-    while (angle < 0) {
-      angle += 360;
+    var new_angle = angle;
+    while (new_angle < 0) {
+      new_angle += 360;
     }
 
     var result = img;
-    while (angle != 0) {
+    while (new_angle != 0) {
       result = rotate_clockwise_90(result);
-      angle -= 90;
+      new_angle -= 90;
     }
 
     return result;
