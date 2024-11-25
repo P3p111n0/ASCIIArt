@@ -2,6 +2,8 @@ package utils;
 
 import scala.util.Random;
 import image.pixel.RGBPixel;
+import image.Image;
+import image.data.ImageData;
 
 object TestUtils {
   private val seed = 333;
@@ -48,5 +50,17 @@ object TestUtils {
         arr = arr :+ inner;
       }
       return arr;
+  }
+
+  def get_random_image(): Image[MockPixel] = {
+    val dims = get_random_dims();
+    val width = dims(0);
+    val height = dims(1);
+    val vec = get_random_vector(width, height);
+    val data = ImageData(vec) match {
+      case Left(value) => value;
+      case Right(value) => assert(false);
+    }
+    return Image(data);
   }
 }

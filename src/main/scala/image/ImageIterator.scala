@@ -9,7 +9,7 @@ case class ImageElement[T <: Pixel] private[iterator](val row : Int, val col : I
 
 class ImageIterator[T <: Pixel] private[image](private val image : Image[T], private var row : Int, private var col : Int) extends Iterator[ImageElement[T]] {
   override def hasNext(): Boolean = {
-    return !(row == image.height() && col == 0);
+    return !(row == image.width() && col == 0);
   }
 
   override def next(): ImageElement[T] = {
@@ -25,7 +25,7 @@ class ImageIterator[T <: Pixel] private[image](private val image : Image[T], pri
     val result = new ImageElement(row, col, pixel);
 
     col += 1;
-    if (col == image.width()) {
+    if (col == image.height()) {
       col = 0;
       row += 1;
     }
@@ -44,11 +44,11 @@ object ImageIterator {
   }
 
   def apply[T <: Pixel](img : Image[T], row : Int, col : Int): Either[ImageIterator[T], Error] = {
-    if (!validate(row, img.height())) {
+    if (!validate(row, img.width())) {
       return Right(new Error("ImageIterator: Row index out of range."));
     }
 
-    if (!validate(col, img.width())) {
+    if (!validate(col, img.height())) {
       return Right(new Error("ImageIterator: Column index out of range."));
     }
 
