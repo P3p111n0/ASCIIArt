@@ -12,7 +12,7 @@ class XFlip[T <: Pixel] extends Flip[T] {
 
     boundary {
       for (pos <- img.iterate()) {
-        if (pos.row == (img.width() / 2 + 1) && pos.col == 0) {
+        if (pos.row == (img.width() / 2 + (img.width() % 2)) && pos.col == 0) {
           break();
         }
 

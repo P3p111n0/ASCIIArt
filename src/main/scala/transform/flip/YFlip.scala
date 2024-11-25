@@ -11,7 +11,7 @@ class YFlip[T <: Pixel] extends Flip[T] {
     var builder = ImageBuilder(img);
 
       for (pos <- img.iterate()) {
-        if (pos.col >= (img.height() / 2 + 1)) {
+        if (pos.col >= (img.height() / 2 + (img.height() % 2))) {
           // nop
         } else {
           val new_col = img.height() - 1 - pos.col;
