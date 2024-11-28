@@ -1,3 +1,3 @@
 package ui.args;
 
-trait Arg(iterable: Boolean) {}
+trait Arg(val iterable: Boolean, val name : String); 

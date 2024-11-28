@@ -26,4 +26,21 @@ class ASCIIIntMap(val map_ : String) extends ASCIIStringMap[Int](map_) {
   }
 }
 
+class NonlinearASCIIMap(map : String) extends ASCIIStringMap[Int](map = map) {
+  override def apply(value: Int): ASCIIPixel = {
+    val first_n_values = 255 - map.length();
+    if (value < first_n_values) {
+      return ASCIIPixel(map(0)) match {
+        case Left(value) => value;
+        case Right(_) => throw new InternalException("NonlinearASCIIMap: Couldn't construct ASCIIPixel"); 
+      }
+    }
+    val new_value = value - first_n_values;
+    return ASCIIPixel(map(new_value)) match {
+      case Right(_) => throw new InternalException("ASCIIIntMap: Couldn't construct ASCIIPixel.");
+      case Left(p) => return p;
+    }
+  }
+}
+
 object StandardASCIIMap extends ASCIIIntMap(" .\'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$");

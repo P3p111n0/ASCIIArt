@@ -1,7 +1,8 @@
 package image.iterator;
 
-import org.scalatest.funsuite.AnyFunSuite;
-import utils.{TestUtils, MockPixel}
+import org.scalatest.funsuite.AnyFunSuite
+import testing.TestUtils;
+import testing.MockPixel
 
 class ImageIteratorTest extends AnyFunSuite {
   test("Constructs") {

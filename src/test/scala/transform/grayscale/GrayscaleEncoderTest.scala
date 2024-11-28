@@ -1,9 +1,8 @@
 package transform.grayscale
 
 import org.scalatest.funsuite.AnyFunSuite;
-import utils.TestUtils
-import utils.MockGrayscale
-import image.pixel.RGBPixel;
+import image.pixel.RGBPixel
+import testing.{MockGrayscale, TestUtils};
 
 class GrayscaleEncoderTest extends AnyFunSuite {
   test("Encodes") {

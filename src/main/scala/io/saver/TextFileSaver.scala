@@ -11,7 +11,7 @@ import java.io.FileOutputStream
 class TextFileSaver(private val path : String) extends StreamSaver {
   override def save(img: Image[ASCIIPixel]): Option[Error] = {
     val f = new File(path);
-    if (!f.canWrite()) {
+    if (f.exists() && !f.canWrite()) {
       return Some(new Error("Cannot write to file: %s".format(path)));
     }
 

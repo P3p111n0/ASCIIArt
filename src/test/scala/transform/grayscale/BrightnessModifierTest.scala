@@ -2,7 +2,7 @@ package transform.grayscale;
 
 import image.pixel.RGBPixel;
 import org.scalatest.funsuite.AnyFunSuite;
-import utils.MockGrayscale;
+import testing.MockGrayscale;
 
 class BrightnessModifierTest extends AnyFunSuite {
   test("Modifies") {

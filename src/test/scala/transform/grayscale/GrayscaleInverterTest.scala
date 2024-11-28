@@ -2,7 +2,7 @@ package transform.grayscale
 
 import org.scalatest.funsuite.AnyFunSuite;
 import image.pixel.RGBPixel;
-import utils.MockGrayscale;
+import testing.MockGrayscale;
 
 class GrayscaleInverterTest extends AnyFunSuite {
   test("Inverts") {

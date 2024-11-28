@@ -1,7 +1,7 @@
 package ui.args;
 
-abstract class LoadArg extends Arg(iterable = false); 
+abstract class LoadArg(name : String) extends IOArg(iterable = false, name = name); 
 
-class ImageArg(private val path : String) extends LoadArg;
+case class ImageArg(val path : String) extends LoadArg(name = "image");
 
-object RandomImageArg extends LoadArg;
+object RandomImageArg extends LoadArg(name = "image-random");

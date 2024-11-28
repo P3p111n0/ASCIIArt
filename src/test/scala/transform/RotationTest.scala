@@ -1,9 +1,9 @@
 package transform;
 
 import org.scalatest.funsuite.AnyFunSuite
-import utils.{MockPixel, TestUtils}
 import image.{Image, ImageBuilder}
-import image.data.ImageData;
+import image.data.ImageData
+import testing.{MockPixel, TestUtils};
 
 class RotationTest extends AnyFunSuite {
   test("Constructs") {

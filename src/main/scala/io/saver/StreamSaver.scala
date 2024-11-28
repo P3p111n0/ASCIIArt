@@ -14,14 +14,14 @@ trait StreamSaver extends Saver[ASCIIPixel] {
     val builder = ImageBuilder(img);
 
     for (i <- 0 until builder.get_width()) {
-      for (j <- 0 to builder.get_height()) {
+      for (j <- 0 until builder.get_height()) {
         val pixel = builder.get(i, j) match {
           case Left(value) => value;
           case _ => throw new InternalException("StreamSaver: Failed to get at (%d, %d)".format(i, j));
         }
         stream.write(pixel.c);
       }
-      stream.write("\n".toByte);
+      stream.write('\n');
     }
   }
 }

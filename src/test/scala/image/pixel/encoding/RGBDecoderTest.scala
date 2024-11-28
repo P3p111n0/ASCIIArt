@@ -2,7 +2,7 @@ package image.pixel.encoding;
 
 import org.scalatest.funsuite.AnyFunSuite;
 import image.pixel.RGBPixel;
-import utils.TestUtils;
+import testing.TestUtils;
 import image.pixel.encoding.RGBEncoder;
 
 class RGBDecoderTest extends AnyFunSuite {

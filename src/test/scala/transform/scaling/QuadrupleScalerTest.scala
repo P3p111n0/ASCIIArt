@@ -2,8 +2,9 @@ package transform.scaling;
 
 import image.Image;
 import image.data.ImageData;
-import utils.{TestUtils, MockPixel};
-import org.scalatest.funsuite.AnyFunSuite;
+import testing.MockPixel;
+import org.scalatest.funsuite.AnyFunSuite
+import testing.TestUtils;
 
 class QuadrupleScalerTest extends AnyFunSuite {
   test("Scales") {

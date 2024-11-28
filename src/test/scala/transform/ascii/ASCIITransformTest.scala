@@ -1,10 +1,11 @@
 package transform.ascii;
 
 import image.pixel.{RGBPixel, ASCIIPixel};
-import utils.{MockRgbAsciiTransform, MockGrayscale, MockToASCIIPixel};
+import testing.MockGrayscale;
 import org.scalatest.funsuite.AnyFunSuite;
 import image.Image;
-import image.data.ImageData;
+import image.data.ImageData
+import testing.{MockRgbAsciiTransform, MockToASCIIPixel};
 
 class ASCIITransformTest extends AnyFunSuite {
   test("Transforms img to ascii") {

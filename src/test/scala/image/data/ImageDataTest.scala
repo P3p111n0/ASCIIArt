@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import scala.util.Random
 import scala.Vector
 import org.scalatest.matchers.must.Matchers
-import utils.{TestUtils, MockPixel}
+import testing.{MockPixel, TestUtils}
 
 class ImageDataTest extends AnyFunSuite {
   test("Constructs") {

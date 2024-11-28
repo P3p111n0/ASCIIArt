@@ -1,8 +1,8 @@
 package image.pixel 
 
 import org.scalatest.funsuite.AnyFunSuite
+import testing.TestUtils
 import scala.util.Random
-import utils.TestUtils
 
 class RGBPixelTest extends AnyFunSuite {
   test("Constructs"){

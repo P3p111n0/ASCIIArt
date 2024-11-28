@@ -1,7 +1,7 @@
-package utils;
+package testing
 
+import image.pixel.RGBPixel
 import image.pixel.encoding.Encoder;
-import image.pixel.RGBPixel;
 
 object MockGrayscale extends Encoder[RGBPixel, Int] {
   override def apply(elem: RGBPixel): Int = {

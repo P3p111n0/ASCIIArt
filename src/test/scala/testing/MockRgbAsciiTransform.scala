@@ -1,9 +1,9 @@
-package utils;
+package testing
 
-import image.pixel.{RGBPixel, ASCIIPixel};
-import image.pixel.encoding.Encoder;
+import image.pixel.encoding.Encoder
+import image.pixel.{ASCIIPixel, RGBPixel}
+import transform.PixelTransform
 import transform.ascii.ASCIIMap;
-import transform.PixelTransform;
 
 class MockRgbAsciiTransform(val to_grayscale : Encoder[RGBPixel, Int], val to_ascii : ASCIIMap[Int]) extends PixelTransform[RGBPixel, ASCIIPixel] {
   def apply(pixel: RGBPixel): ASCIIPixel = {

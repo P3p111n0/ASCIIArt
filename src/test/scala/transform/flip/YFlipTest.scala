@@ -2,8 +2,9 @@ package transform.flip;
 
 import image.Image;
 import image.data.ImageData;
-import utils.{TestUtils, MockPixel};
-import org.scalatest.funsuite.AnyFunSuite;
+import testing.MockPixel;
+import org.scalatest.funsuite.AnyFunSuite
+import testing.TestUtils;
 
 class YFlipTest extends AnyFunSuite {
   test("Flips") {

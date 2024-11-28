@@ -2,8 +2,9 @@ package transform.ascii;
 
 import image.pixel.ASCIIPixel;
 import image.pixel.RGBPixel;
-import utils.{MockGrayscale, MockToASCIIPixel};
-import org.scalatest.funsuite.AnyFunSuite;
+import testing.MockGrayscale;
+import org.scalatest.funsuite.AnyFunSuite
+import testing.MockToASCIIPixel;
 
 class ToASCIITransformTest extends AnyFunSuite {
   test("Transforms") {

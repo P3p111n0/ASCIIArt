@@ -1,8 +1,8 @@
-package utils;
+package testing
 
-import image.pixel.encoding.Encoder;
+import image.pixel.ASCIIPixel
+import image.pixel.encoding.Encoder
 import transform.ascii.ASCIIMap;
-import image.pixel.ASCIIPixel;
 
 object MockToASCIIPixel extends ASCIIMap[Int] {
   override def apply(elem: Int): ASCIIPixel = {

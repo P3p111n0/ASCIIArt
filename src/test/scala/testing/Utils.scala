@@ -1,15 +1,21 @@
-package utils;
+package testing
+
+import image.Image
+import image.data.ImageData
+import image.pixel.RGBPixel
+import testing.MockPixel
 
 import scala.util.Random;
-import image.pixel.RGBPixel;
-import image.Image;
-import image.data.ImageData;
 
 object TestUtils {
   private val seed = 333;
   private val gen = new Random(seed);
   val nshots = 10;
 
+  def get_test_images_path(): String = {
+    return "./src/test/static/";
+  }
+  
   def get_int_in_range(min : Int, max : Int): Int = {
     return gen.between(min, max);
   }
