@@ -149,4 +149,167 @@ class RotationTest extends AnyFunSuite {
       current = transform(previous);
     }
   }
+
+  test("Rotates 1x2") {
+    val data = ImageData(Vector(Vector(MockPixel(1), MockPixel(2)))) match {
+      case Left(value) => value;
+      case Right(value) => fail(value.msg);
+    }
+    val img = Image(data);
+    val transform = Rotation[MockPixel](90) match {
+      case Left(t) => t;
+      case Right(e) => fail(e.msg);
+    }
+
+    val rotated = transform(img);
+    assert(rotated.width() == 2);
+    assert(rotated.height() == 1);
+
+    val rotated_data = rotated.data;
+    rotated_data.at(0, 0) match {
+      case Some(MockPixel(1)) =>
+      case _ => fail("Mismatch at (0, 0).");
+    }
+
+    rotated_data.at(1, 0) match {
+      case Some(MockPixel(2)) =>
+      case _ => fail("Mismatch at (1, 0).");
+    }
+  }
+
+  test("Rotates 2x3") {
+    val data = ImageData(Vector(Vector(MockPixel(1), MockPixel(2), MockPixel(3)),
+      Vector(MockPixel(4), MockPixel(5), MockPixel(6)))) match {
+      case Left(value) => value;
+      case Right(value) => fail(value.msg);
+    }
+    val img = Image(data);
+    val transform = Rotation[MockPixel](90) match {
+      case Left(t) => t;
+      case Right(e) => fail(e.msg);
+    }
+
+    val rotated = transform(img);
+    assert(rotated.width() == 3);
+    assert(rotated.height() == 2);
+
+    val rotated_data = rotated.data;
+    rotated_data.at(0, 0) match {
+      case Some(MockPixel(4)) =>
+      case _ => fail("Mismatch at (0, 0).");
+    }
+
+    rotated_data.at(0, 1) match {
+      case Some(MockPixel(1)) =>
+      case _ => fail("Mismatch at (0, 1).");
+    }
+
+    rotated_data.at(1, 0) match {
+      case Some(MockPixel(5)) =>
+      case _ => fail("Mismatch at (1, 0).");
+    }
+
+    rotated_data.at(1, 1) match {
+      case Some(MockPixel(2)) =>
+      case _ => fail("Mismatch at (1, 1).");
+    }
+
+    rotated_data.at(2, 0) match {
+      case Some(MockPixel(6)) =>
+      case _ => fail("Mismatch at (2, 0).");
+    }
+
+    rotated_data.at(2, 1) match {
+      case Some(MockPixel(3)) =>
+      case _ => fail("Mismatch at (2, 1).");
+    }
+  }
+
+  test("Rotates 3x3") {
+    val data = ImageData(Vector(
+      Vector(MockPixel(1), MockPixel(2), MockPixel(3)),
+      Vector(MockPixel(4), MockPixel(5), MockPixel(6)),
+      Vector(MockPixel(7), MockPixel(8), MockPixel(9)))
+    ) match {
+      case Left(value) => value;
+      case Right(value) => fail(value.msg);
+    }
+    val img = Image(data);
+    val transform = Rotation[MockPixel](90) match {
+      case Left(t) => t;
+      case Right(e) => fail(e.msg);
+    }
+
+    val rotated = transform(img);
+    assert(rotated.width() == 3);
+    assert(rotated.height() == 3);
+
+    val rotated_data = rotated.data;
+    rotated_data.at(0, 0) match {
+      case Some(MockPixel(7)) =>
+      case _ => fail("Mismatch at (0, 0).");
+    }
+
+    rotated_data.at(0, 1) match {
+      case Some(MockPixel(4)) =>
+      case _ => fail("Mismatch at (0, 1).");
+    }
+
+    rotated_data.at(0, 2) match {
+      case Some(MockPixel(1)) =>
+      case _ => fail("Mismatch at (0, 2).");
+    }
+
+    rotated_data.at(1, 0) match {
+      case Some(MockPixel(8)) =>
+      case _ => fail("Mismatch at (1, 0).");
+    }
+
+    rotated_data.at(1, 1) match {
+      case Some(MockPixel(5)) =>
+      case _ => fail("Mismatch at (1, 1).");
+    }
+
+    rotated_data.at(1, 2) match {
+      case Some(MockPixel(2)) =>
+      case _ => fail("Mismatch at (1, 2).");
+    }
+
+    rotated_data.at(2, 0) match {
+      case Some(MockPixel(9)) =>
+      case _ => fail("Mismatch at (2, 0).");
+    }
+
+    rotated_data.at(2, 1) match {
+      case Some(MockPixel(6)) =>
+      case _ => fail("Mismatch at (2, 1).");
+    }
+
+    rotated_data.at(2, 2) match {
+      case Some(MockPixel(3)) =>
+      case _ => fail("Mismatch at (2, 2).");
+    }
+  }
+
+  test("Rotates 1x1") {
+    val data = ImageData(Vector(Vector(MockPixel(1)))) match {
+      case Left(value) => value;
+      case Right(value) => fail(value.msg);
+    }
+    val img = Image(data);
+    val transform = Rotation[MockPixel](90) match {
+      case Left(t) => t;
+      case Right(e) => fail(e.msg);
+    }
+
+    val rotated = transform(img);
+    assert(rotated.width() == 1);
+    assert(rotated.height() == 1);
+
+    val rotated_data = rotated.data;
+    rotated_data.at(0, 0) match {
+      case Some(MockPixel(1)) =>
+      case _ => fail("Mismatch at (0, 0).");
+    }
+  }
 }
