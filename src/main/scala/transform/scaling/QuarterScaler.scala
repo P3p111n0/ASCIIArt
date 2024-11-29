@@ -37,7 +37,7 @@ class QuarterScaler[T <: Pixel] extends Scaler[T] {
         col_skip %= 2;
       }
     }
-    
+
     return builder.collect();
   }
 }

@@ -5,7 +5,7 @@ import image.pixel.Pixel
 import error.Error;
 import error.InternalException
 
-// ImageElement represents apixel of an image. Value is the pixel at coordinates (row, col).
+// ImageElement represents a pixel of an image. Value is the pixel at coordinates (row, col).
 case class ImageElement[T <: Pixel] private[iterator](val row: Int, val col: Int, val value: T);
 
 /**
