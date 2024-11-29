@@ -1,6 +1,6 @@
 package ui.evaluator;
 
-import ui.args.{Arg, LoadArg, RotateArg, ScaleArg, XFlipArg, YFlipArg, InvertArg, BrightnessArg, GrayscaleArg, TableArg, BuiltinTableArg, CustomTableArg, ExportArg, FileExportArg, ConsoleExportArg, IOArg};
+import ui.args.*
 import loader.Loader
 import image.pixel.RGBPixel
 import error.Error
@@ -29,14 +29,6 @@ import utils.FileUtils;
 
 class ArgEvaluator(private val args : Seq[Arg]) extends Evaluator(args) {
   private val seed = 333;
-  private def get_file_ext(path : String): Option[String] = {
-    val i = path.lastIndexOf('.');
-    if (i > 0) {
-        return Some(path.substring(i+1));
-    }
-    return None;
-  }
-
   override def get_loader(): Either[Loader[RGBPixel], Error] = {
     val matcher = (x : Arg) => x match {
       case x : LoadArg => true;
@@ -77,7 +69,7 @@ class ArgEvaluator(private val args : Seq[Arg]) extends Evaluator(args) {
     val e : Option[Error] = boundary {
       for (arg <- filtered) {
         if (!arg.iterable && seen(arg.name)) {
-          break(Some(new Error(s"Argument $arg.name cannot be used more than once.")));
+          break(Some(new Error(s"Argument ${arg.name} cannot be used more than once.")));
         }
         seen = seen + arg.name;
         encoder = arg match {
@@ -108,7 +100,8 @@ class ArgEvaluator(private val args : Seq[Arg]) extends Evaluator(args) {
       case 1 => filtered(0) match {
         case BuiltinTableArg(name) => name match {
           case "linear" => return Left(StandardASCIIMap);
-          case "nonlinear" => return Left(new NonlinearASCIIMap(" .:-=+*#%@")); 
+          case "nonlinear" => return Left(new NonlinearASCIIMap(" .:-=+*#%@"));
+          case "simple" => return Left(new ASCIIIntMap(" .:-=+*#%@"));
           case _ => return Right(new Error(s"Unknown builtin table $name"));
         }
         case CustomTableArg(map) => return Left(new ASCIIIntMap(map)); 
@@ -170,10 +163,6 @@ class ArgEvaluator(private val args : Seq[Arg]) extends Evaluator(args) {
     }
     val filtered = args.filter(matcher);
 
-    if (filtered.length == 0) {
-      return Right(new Error("No image exporting method specified."));
-    }
-
     var result = Seq[Saver[ASCIIPixel]]();
     for (saver <- filtered) {
         val new_elem = saver match {
@@ -185,7 +174,12 @@ class ArgEvaluator(private val args : Seq[Arg]) extends Evaluator(args) {
           } 
         }
         result = result.appended(new_elem);
-      } 
+    }
+
+    if (result.isEmpty) {
+      result = result.appended(ConsoleSaver);
+    }
+
     return Left(result);
   }
 }

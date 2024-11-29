@@ -2,7 +2,7 @@ package ui.parser;
 
 import ui.args.Arg;
 import error.Error;
-import ui.parser.partial.{PartialParser, LoadArgParser, RotateArgParser, ScaleArgParser, FlipArgParser, InvertArgParser, BrightnessParser, ExportArgParser, TableArgParser};
+import ui.parser.partial.*
 
 trait Parser {
   protected val parser_map : Map[String, PartialParser] = Map(

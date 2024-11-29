@@ -8,7 +8,7 @@ import image.pixel.ASCIIPixel
 import java.io.File
 import java.io.FileOutputStream
 
-class TextFileSaver(private val path : String) extends StreamSaver {
+class TextFileSaver(val path : String) extends StreamSaver {
   override def save(img: Image[ASCIIPixel]): Option[Error] = {
     val f = new File(path);
     if (f.exists() && !f.canWrite()) {

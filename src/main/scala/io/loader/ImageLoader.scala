@@ -34,7 +34,7 @@ trait ImageLoader extends Loader[RGBPixel] {
     val err : Option[Error] = boundary {
       for (i <- 0 until builder.get_width()) {
         for (j <- 0 until builder.get_height()) {
-          val encoded_pixel = loaded_image.getRGB(j, i);
+          val encoded_pixel = loaded_image.getRGB(j, i); // width is downwards ???????? idk why
           val pixel = decoder(encoded_pixel);
           builder.set(i, j, pixel) match {
             case Right(e) => break(Some(e));

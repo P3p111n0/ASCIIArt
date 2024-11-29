@@ -9,7 +9,7 @@ trait ASCIIMap[T] {
 
 abstract class ASCIIStringMap[T](val map : String) extends ASCIIMap[T];
 
-class ASCIIIntMap(val map_ : String) extends ASCIIStringMap[Int](map_) {
+case class ASCIIIntMap(map_ : String) extends ASCIIStringMap[Int](map_) {
   private val max = 255;
   override def apply(value: Int): ASCIIPixel = {
     val ratio : Double = max / map_.length();
@@ -26,7 +26,7 @@ class ASCIIIntMap(val map_ : String) extends ASCIIStringMap[Int](map_) {
   }
 }
 
-class NonlinearASCIIMap(map : String) extends ASCIIStringMap[Int](map = map) {
+case class NonlinearASCIIMap(map_ : String) extends ASCIIStringMap[Int](map = map_) {
   override def apply(value: Int): ASCIIPixel = {
     val first_n_values = 255 - map.length();
     if (value < first_n_values) {
