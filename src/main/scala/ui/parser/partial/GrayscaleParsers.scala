@@ -11,8 +11,8 @@ object InvertArgParser extends PartialParser {
     }
 
     new_tokens.head match {
-      case "invert" => new ParserResult(new_tokens.drop(1), Left(InvertArg));
-      case _ => new ParserResult(new_tokens.drop(1), Right(new Error("Invalid argument.")));
+      case "--invert" => new ParserResult(new_tokens.drop(1), Left(InvertArg));
+      case _ => new ParserResult(new_tokens, Right(new Error("Invalid argument.")));
     }
   }
 }
