@@ -16,7 +16,6 @@ class TextFileSaver(private val path : String) extends StreamSaver {
     }
 
     val stream = new FileOutputStream(f);
-    write_to_stream(img, stream); 
-    return None;
+    return write_to_stream(img, stream);
   }
 }
