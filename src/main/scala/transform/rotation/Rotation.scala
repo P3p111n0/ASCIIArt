@@ -14,9 +14,11 @@ class Rotation[T <: Pixel] private(val angle: Int) extends AbstractRotation[T] {
     }
 
     for (pos <- img.iterate()) {
-      builder = builder.set(pos.col, pos.row, pos.value) match {
+      val new_row = pos.col;
+      val new_col = img.width() - pos.row - 1;
+      builder = builder.set(new_row, new_col, pos.value) match {
         case Left(b) => b;
-        case _ => throw new InternalException("Rotation: Failed to set at (%d, %d).".format(pos.col, pos.row));
+        case _ => throw new InternalException("Rotation: Failed to set at (%d, %d).".format(new_row, new_col));
       }
     }
 

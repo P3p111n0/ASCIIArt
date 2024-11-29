@@ -36,7 +36,7 @@ trait ImageLoader extends Loader[RGBPixel] {
 
     val loaded_image = ImageIO.read(f);
     val fill = RGBPixel();
-    val builder_opt = ImageBuilder(loaded_image.getWidth(), loaded_image.getHeight(), fill);
+    val builder_opt = ImageBuilder(loaded_image.getHeight(), loaded_image.getWidth(), fill);
     var builder: ImageBuilder[RGBPixel] = builder_opt match {
       case Right(e) => return Right(e);
       case Left(x) => x;

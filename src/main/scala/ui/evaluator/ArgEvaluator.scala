@@ -27,11 +27,12 @@ import transform.rotation.Rotation
 import scala.util.boundary, boundary.break;
 import utils.FileUtils;
 
-class ArgEvaluator(private val args : Seq[Arg]) extends Evaluator(args) {
+class ArgEvaluator(private val args: Seq[Arg]) extends Evaluator(args) {
   private val seed = 333;
+
   override def get_loader(): Either[Loader[RGBPixel], Error] = {
-    val matcher = (x : Arg) => x match {
-      case x : LoadArg => true;
+    val matcher = (x: Arg) => x match {
+      case x: LoadArg => true;
       case _ => false;
     }
     val filtered = args.filter(matcher);
@@ -49,9 +50,9 @@ class ArgEvaluator(private val args : Seq[Arg]) extends Evaluator(args) {
           case RandomImageArg => {
             val generator = RGBGenerator(seed);
             return Left(new RandomLoader(seed, generator));
-          } 
+          }
         }
-      } 
+      }
       case 0 => return Right(new Error("No image loading method specified."));
       case _ => return Right(new Error("Multiple image loading methods specified."));
     }
@@ -59,21 +60,21 @@ class ArgEvaluator(private val args : Seq[Arg]) extends Evaluator(args) {
   }
 
   override def get_encoder(): Either[Encoder[RGBPixel, Int], Error] = {
-    val matcher = (x : Arg) => x match {
-      case _ : GrayscaleArg => true;
+    val matcher = (x: Arg) => x match {
+      case _: GrayscaleArg => true;
       case _ => false;
     }
     var seen = Set[String]();
     val filtered = args.filter(matcher);
-    var encoder : Encoder[RGBPixel, Int] = GrayscaleEncoder;
-    val e : Option[Error] = boundary {
+    var encoder: Encoder[RGBPixel, Int] = GrayscaleEncoder;
+    val e: Option[Error] = boundary {
       for (arg <- filtered) {
         if (!arg.iterable && seen(arg.name)) {
           break(Some(new Error(s"Argument ${arg.name} cannot be used more than once.")));
         }
         seen = seen + arg.name;
         encoder = arg match {
-          case InvertArg => new GrayscaleInverter[RGBPixel](encoder); 
+          case InvertArg => new GrayscaleInverter[RGBPixel](encoder);
           case BrightnessArg(offset) => new BrightnessModifier[RGBPixel](offset, encoder);
         }
       }
@@ -89,8 +90,8 @@ class ArgEvaluator(private val args : Seq[Arg]) extends Evaluator(args) {
   }
 
   override def get_ascii_map(): Either[ASCIIMap[Int], Error] = {
-    val matcher = (x : Arg) => x match {
-      case _ : TableArg => true;
+    val matcher = (x: Arg) => x match {
+      case _: TableArg => true;
       case _ => false;
     }
 
@@ -100,34 +101,34 @@ class ArgEvaluator(private val args : Seq[Arg]) extends Evaluator(args) {
       case 1 => filtered(0) match {
         case BuiltinTableArg(name) => name match {
           case "linear" => return Left(StandardASCIIMap);
-          case "nonlinear" => return Left(new NonlinearASCIIMap(" .:-=+*#%@"));
+          case "nonlinear" => return Left(new NonlinearASCIIMap(".aasdfas+*#%@"));
           case "simple" => return Left(new ASCIIIntMap(" .:-=+*#%@"));
           case _ => return Right(new Error(s"Unknown builtin table $name"));
         }
-        case CustomTableArg(map) => return Left(new ASCIIIntMap(map)); 
+        case CustomTableArg(map) => return Left(new ASCIIIntMap(map));
       }
       case _ => return Right(new Error("Multiple transformation tables specified."));
     }
   }
 
   override def get_filters(): Either[Seq[Transformation[ASCIIPixel, ASCIIPixel]], Error] = {
-    val matcher = (x : Arg) => x match {
-      case _ : TableArg => false;
-      case _ : IOArg => false;
-      case _ : GrayscaleArg => false;
+    val matcher = (x: Arg) => x match {
+      case _: TableArg => false;
+      case _: IOArg => false;
+      case _: GrayscaleArg => false;
       case _ => true;
     }
     val filtered = args.filter(matcher);
     var result = Seq[Transformation[ASCIIPixel, ASCIIPixel]]();
     var seen = Set[String]();
-    
-    val e : Option[Error] = boundary {
+
+    val e: Option[Error] = boundary {
       for (t <- filtered) {
         if (!t.iterable && seen(t.name)) {
           break(Some(new Error(s"Filter $t.name cannot be used more than once.")));
-        } 
+        }
         seen = seen + t.name;
-        val matched_arg : Either[Transformation[ASCIIPixel, ASCIIPixel], Error] = t match {
+        val matched_arg: Either[Transformation[ASCIIPixel, ASCIIPixel], Error] = t match {
           case XFlipArg => Left(new XFlip[ASCIIPixel]());
           case YFlipArg => Left(new YFlip[ASCIIPixel]());
           case ScaleArg(factor) => ScalerSelector[ASCIIPixel](factor) match {
@@ -139,7 +140,7 @@ class ArgEvaluator(private val args : Seq[Arg]) extends Evaluator(args) {
             case Right(e) => Right(e);
           }
           case _ => throw new InternalException("Unhandled arg type.");
-        } 
+        }
         matched_arg match {
           case Left(transform) => result = result.appended(transform);
           case Right(e) => break(Some(e));
@@ -154,26 +155,26 @@ class ArgEvaluator(private val args : Seq[Arg]) extends Evaluator(args) {
     }
 
     return Left(result);
-  } 
+  }
 
   override def get_exporters(): Either[Seq[Saver[ASCIIPixel]], Error] = {
-    val matcher = (x : Arg) => x match {
-      case x : ExportArg => true;
+    val matcher = (x: Arg) => x match {
+      case x: ExportArg => true;
       case _ => false;
     }
     val filtered = args.filter(matcher);
 
     var result = Seq[Saver[ASCIIPixel]]();
     for (saver <- filtered) {
-        val new_elem = saver match {
-          case FileExportArg(path) => {
-            new TextFileSaver(path); 
-          }
-          case ConsoleExportArg => {
-            ConsoleSaver;
-          } 
+      val new_elem = saver match {
+        case FileExportArg(path) => {
+          new TextFileSaver(path);
         }
-        result = result.appended(new_elem);
+        case ConsoleExportArg => {
+          ConsoleSaver;
+        }
+      }
+      result = result.appended(new_elem);
     }
 
     if (result.isEmpty) {

@@ -23,7 +23,7 @@ class ArgEvaluatorTest extends AnyFunSuite {
     val result = evaluator.get_loader();
     result match {
       case Left(value) => value match {
-        case loader : PNGLoader =>
+        case loader: PNGLoader =>
         case _ => fail("Expected PNGLoader");
       }
       case _ => fail("Failed to get png loader.");
@@ -37,7 +37,7 @@ class ArgEvaluatorTest extends AnyFunSuite {
     val result = evaluator.get_loader();
     result match {
       case Left(value) => value match {
-        case loader : JPGLoader =>
+        case loader: JPGLoader =>
         case _ => fail("Expected JPGLoader.");
       }
       case _ => fail("Failed to get jpg loader.");
@@ -51,7 +51,7 @@ class ArgEvaluatorTest extends AnyFunSuite {
     val result = evaluator.get_loader();
     result match {
       case Left(value) => value match {
-        case loader : GIFLoader =>
+        case loader: GIFLoader =>
         case _ => fail("Expected GIFLoader.");
       }
       case _ => fail("Failed to get gif loader.");
@@ -126,7 +126,7 @@ class ArgEvaluatorTest extends AnyFunSuite {
     val evaluator = new ArgEvaluator(args);
     val result = evaluator.get_encoder();
     result match {
-      case Left(BrightnessModifier(10 ,GrayscaleInverter(GrayscaleInverter(GrayscaleEncoder)))) =>
+      case Left(BrightnessModifier(10, GrayscaleInverter(GrayscaleInverter(GrayscaleEncoder)))) =>
       case _ => fail("Failed to get multiple encoders.");
     }
   }
@@ -176,7 +176,7 @@ class ArgEvaluatorTest extends AnyFunSuite {
     val evaluator = new ArgEvaluator(args);
     val result = evaluator.get_ascii_map();
     result match {
-      case Left(NonlinearASCIIMap(" .:-=+*#%@")) =>
+      case Left(NonlinearASCIIMap(".aasdfas+*#%@")) =>
       case _ => fail("Failed to get nonlinear ascii map.");
     }
   }
@@ -270,7 +270,7 @@ class ArgEvaluatorTest extends AnyFunSuite {
     val result = evaluator.get_exporters();
     result match {
       case Left(Seq(value)) => value match {
-        case saver : TextFileSaver => assert(saver.path == "path/to/file");
+        case saver: TextFileSaver => assert(saver.path == "path/to/file");
         case _ => fail("Expected TextFileSaver.");
       }
       case _ => fail("Failed to get file saver.");

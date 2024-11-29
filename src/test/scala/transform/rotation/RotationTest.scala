@@ -104,9 +104,11 @@ class RotationTest extends AnyFunSuite {
     assert(rotated.height() == img.width());
 
     for (pos <- rotated.iterate()) {
-      val target = data.at(pos.col, pos.row) match {
+      val old_row = img.width() - pos.col - 1;
+      val old_col = pos.row;
+      val target = data.at(old_row, old_col) match {
         case Some(p) => p;
-        case None => fail("Failed to get pixel at (%d, %d).".format(pos.row, pos.col));
+        case None => fail("Failed to get pixel at (%d, %d).".format(old_row, old_col));
       }
       assert(pos.value == target);
     }
@@ -135,7 +137,9 @@ class RotationTest extends AnyFunSuite {
       assert(current.height() == previous.width());
       val builder = ImageBuilder(previous);
       for (pos <- current.iterate()) {
-        val target = builder.get(pos.col, pos.row) match {
+        val old_row = previous.width() - pos.col - 1;
+        val old_col = pos.row;
+        val target = builder.get(old_row, old_col) match {
           case Left(b) => b;
           case Right(e) => fail(e.msg);
         }
