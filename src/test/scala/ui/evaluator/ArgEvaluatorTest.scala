@@ -12,6 +12,7 @@ import transform.ascii.*
 import transform.flip.{XFlip, YFlip}
 import transform.scaling.*
 import transform.*
+import transform.rotation.Rotation
 
 class ArgEvaluatorTest extends AnyFunSuite {
   private val base = TestUtils.get_test_images_path();

@@ -1,3 +1,4 @@
 package error;
 
-case class Error(msg : String) {};
+// Error class
+case class Error(msg: String) {};

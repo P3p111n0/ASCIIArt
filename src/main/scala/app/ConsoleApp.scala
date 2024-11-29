@@ -10,7 +10,7 @@ import scala.util.boundary, boundary.break;
 import error.Error;
 
 
-class ConsoleApp(console_args : Array[String]) extends App {
+class ConsoleApp(console_args: Array[String]) extends App {
   def run(): Option[error.Error] = {
     val combined_args = console_args.mkString(" ");
     val stream = new ByteArrayInputStream(combined_args.getBytes());
@@ -54,7 +54,7 @@ class ConsoleApp(console_args : Array[String]) extends App {
         return Some(e);
       }
     }
-    
+
     for (f <- filters) {
       ascii_img = f(ascii_img);
     }
@@ -65,14 +65,14 @@ class ConsoleApp(console_args : Array[String]) extends App {
         return Some(e);
       }
     }
-    
-    val e : Option[Error] = boundary {
+
+    val e: Option[Error] = boundary {
       for (exporter <- exporters) {
         exporter.save(ascii_img) match {
           case Some(e) => {
             break(Some(e));
           }
-          case None => 
+          case None =>
         }
       }
       None;

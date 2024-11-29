@@ -21,9 +21,9 @@ import transform.ascii.ASCIIIntMap
 import error.InternalException
 import transform.flip.{XFlip, YFlip}
 import transform.scaling.ScalerSelector
-import transform.Rotation
 import io.saver.{Saver, TextFileSaver, ConsoleSaver}
 import transform.ascii.NonlinearASCIIMap
+import transform.rotation.Rotation
 import scala.util.boundary, boundary.break;
 import utils.FileUtils;
 

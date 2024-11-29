@@ -4,8 +4,9 @@ import image.data.ImageDataContainer;
 import image.pixel.Pixel;
 import iterator.ImageIterator;
 
-class Image[T <: Pixel](val data : ImageDataContainer[T]) {
+class Image[T <: Pixel](val data: ImageDataContainer[T]) {
   def width() = data.width();
+
   def height() = data.height();
 
   def iterate(): ImageIterator[T] = {

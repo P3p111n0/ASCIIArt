@@ -10,8 +10,18 @@ import java.io.IOException
 import image.ImageBuilder
 import error.InternalException
 
+/**
+ * A trait specifying the interface for saving an image to a stream.
+ */
 trait StreamSaver extends Saver[ASCIIPixel] {
-  protected def write_to_stream(img: Image[ASCIIPixel], stream : OutputStream): Option[Error] = {
+  /**
+   * Write an image to a stream.
+   *
+   * @param img    The image to write.
+   * @param stream The stream to write to.
+   * @return An error if the image could not be written properly.
+   */
+  protected def write_to_stream(img: Image[ASCIIPixel], stream: OutputStream): Option[Error] = {
     val builder = ImageBuilder(img);
 
     try {
@@ -26,8 +36,8 @@ trait StreamSaver extends Saver[ASCIIPixel] {
         stream.write('\n');
       }
     } catch {
-      case e : Exception => return Some(new Error(e.toString));
-      case internal : InternalException => throw internal;
+      case e: Exception => return Some(new Error(e.toString));
+      case internal: InternalException => throw internal;
     }
     None;
   }

@@ -1,24 +1,23 @@
-package transform;
+package transform.rotation
 
-import image.Image
-import error.Error
-import image.ImageBuilder
+import error.{Error, InternalException}
+import image.{Image, ImageBuilder}
 import image.pixel.Pixel
-import error.InternalException
+import transform.Transformation
 
-class Rotation[T <: Pixel] private (val angle : Int) extends Transformation[T, T] {
-  private def rotate_clockwise_90(img : Image[T]): Image[T] = {
-    val fill : T = img.iterate().next().value;
+class Rotation[T <: Pixel] private(val angle: Int) extends AbstractRotation[T] {
+  private def rotate_clockwise_90(img: Image[T]): Image[T] = {
+    val fill: T = img.iterate().next().value;
     var builder = ImageBuilder[T](img.height(), img.width(), fill) match {
       case Left(b) => b;
       case _ => throw new InternalException("Rotation: Failed to construct builder.");
     }
 
     for (pos <- img.iterate()) {
-        builder = builder.set(pos.col, pos.row, pos.value) match {
-          case Left(b) => b;
-          case _ => throw new InternalException("Rotation: Failed to set at (%d, %d).".format(pos.col, pos.row));
-        }
+      builder = builder.set(pos.col, pos.row, pos.value) match {
+        case Left(b) => b;
+        case _ => throw new InternalException("Rotation: Failed to set at (%d, %d).".format(pos.col, pos.row));
+      }
     }
 
     return builder.collect();
@@ -41,7 +40,7 @@ class Rotation[T <: Pixel] private (val angle : Int) extends Transformation[T, T
 }
 
 object Rotation {
-  def apply[T <: Pixel](angle : Int): Either[Rotation[T], Error] = {
+  def apply[T <: Pixel](angle: Int): Either[Rotation[T], Error] = {
     if (angle % 90 != 0) {
       return Right(new Error("Rotation: Angle %d is not divisible by 90.".format(angle)));
     }
