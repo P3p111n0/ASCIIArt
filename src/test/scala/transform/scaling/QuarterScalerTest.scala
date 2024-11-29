@@ -33,4 +33,73 @@ class QuarterScalerTest extends AnyFunSuite {
       }
     }
   }
+
+  test("Scales 2x2") {
+    val data = ImageData(Vector(Vector(MockPixel(0), MockPixel(1)), Vector(MockPixel(2), MockPixel(3)))) match {
+      case Left(value) => value;
+      case Right(err) => fail(err.msg);
+    }
+    val image = Image(data);
+    val transform = new QuarterScaler[MockPixel]();
+    val scaled = transform(image);
+    assert(scaled.width() == 1);
+    assert(scaled.height() == 1);
+    assert(scaled.data.at(0, 0).contains(MockPixel(0)));
+  }
+
+  test("Scales 3x2") {
+    val data = ImageData(Vector(
+      Vector(MockPixel(0), MockPixel(1)),
+      Vector(MockPixel(2), MockPixel(3)),
+      Vector(MockPixel(4), MockPixel(5)))
+    ) match {
+      case Left(value) => value;
+      case Right(err) => fail(err.msg);
+    }
+    val image = Image(data);
+    val transform = new QuarterScaler[MockPixel]();
+    val scaled = transform(image);
+
+    assert(scaled.width() == 2);
+    assert(scaled.height() == 1);
+
+    assert(scaled.data.at(0, 0).contains(MockPixel(0)));
+    assert(scaled.data.at(1, 0).contains(MockPixel(4)));
+  }
+
+  test("Scales 4x4") {
+    val data = ImageData(Vector(
+      Vector(MockPixel(0), MockPixel(1), MockPixel(2), MockPixel(3)),
+      Vector(MockPixel(4), MockPixel(5), MockPixel(6), MockPixel(7)),
+      Vector(MockPixel(8), MockPixel(9), MockPixel(10), MockPixel(11)),
+      Vector(MockPixel(12), MockPixel(13), MockPixel(14), MockPixel(15)))
+    ) match {
+      case Left(value) => value;
+      case Right(err) => fail(err.msg);
+    }
+    val image = Image(data);
+    val transform = new QuarterScaler[MockPixel]();
+    val scaled = transform(image);
+
+    assert(scaled.width() == 2);
+    assert(scaled.height() == 2);
+
+    assert(scaled.data.at(0, 0).contains(MockPixel(0)));
+    assert(scaled.data.at(0, 1).contains(MockPixel(2)));
+    assert(scaled.data.at(1, 0).contains(MockPixel(8)));
+    assert(scaled.data.at(1, 1).contains(MockPixel(10)));
+  }
+
+  test("Scales 1x1") {
+    val data = ImageData(Vector(Vector(MockPixel(0)))) match {
+      case Left(value) => value;
+      case Right(err) => fail(err.msg);
+    }
+    val image = Image(data);
+    val transform = new QuarterScaler[MockPixel]();
+    val scaled = transform(image);
+    assert(scaled.width() == 1);
+    assert(scaled.height() == 1);
+    assert(scaled.data.at(0, 0).contains(MockPixel(0)));
+  }
 }
